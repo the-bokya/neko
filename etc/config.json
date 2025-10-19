@@ -1,0 +1,10 @@
+{
+  "vm_images": [
+    {
+      "vm_image_path": "/tmp/vm-image.qcow2",
+      "base_image_path": "/tmp/base-image.qcow2",
+      "base_image_download_url": "https://cloud-images.ubuntu.com/releases/noble/release/ubuntu-24.04-server-cloudimg-amd64.img",
+      "base_image_md5sum_url": "https://cloud-images.ubuntu.com/releases/noble/release/MD5SUMS"
+    }
+  ]
+}
