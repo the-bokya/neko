@@ -37,8 +37,15 @@ func (setup *Setup) Init() error {
 	if err := setup.InitEtcDir(); err != nil {
 		return err
 	}
+	return nil
+}
+
+func (setup *Setup) InitImages() error {
 	if err := setup.ReadConfig(); err != nil {
 		return err
+	}
+	for _, image := range setup.Config.VMImages {
+		image.SetupVMImage()
 	}
 	return nil
 }

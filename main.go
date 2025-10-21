@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 	"fmt"
+	"log"
 	"neko/application"
 	"neko/libvirtapi"
 	"neko/setup"
@@ -40,9 +41,13 @@ func main() {
 		}
 		switch args[2] {
 		case "config":
-			setup.Init(defaultConfigDir)
+			if err := setup.Init(defaultConfigDir); err != nil {
+				log.Fatal(err)
+			}
 		case "images":
-			// TODO: image setup
+			if err := setup.InitImages(); err != nil {
+				log.Fatal(err)
+			}
 		default:
 			fmt.Println("Please provide a valid argument for setup. Valid arguments:")
 			fmt.Println("1. config")

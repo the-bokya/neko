@@ -20,6 +20,7 @@ func (setup *Setup) ReadConfig() error {
 
 	if isPresent {
 		configFile, err = os.Open(configPath)
+		defer configFile.Close()
 		if err != nil {
 			return err
 		}

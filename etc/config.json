@@ -2,10 +2,8 @@
   "vm_images": [
     {
       "name": "Ubuntu 24.04",
-      "vm_image_path": "/tmp/vm-image.qcow2",
-      "base_image_path": "/tmp/base-image.qcow2",
       "base_image_download_url": "https://cloud-images.ubuntu.com/releases/noble/release/ubuntu-24.04-server-cloudimg-amd64.img",
-      "base_image_md5sum_url": "https://cloud-images.ubuntu.com/releases/noble/release/MD5SUMS"
+      "sha256sum": "02dc186dc491514254df58df29a5877c93ca90ac790cc91a164ea90ed3a0bb05"
     }
   ]
 }
