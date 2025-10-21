@@ -21,30 +21,21 @@ func (setup *Setup) ReadConfig() error {
 
 	if isPresent {
 		configFile, err = os.Open(configPath)
-		fmt.Println(err)
 		if err != nil {
 			return err
 		}
 		configData, err = io.ReadAll(configFile)
 	} else {
-		if err != nil {
-			return err
-		} else {
-			configData, err = setup.defaultConfigDir.ReadFile("etc/config.json")
-			if err != nil {
-				return err
-			}
-		}
+		return os.ErrNotExist
 	}
 
 	config, err := getConfig(configData)
-	fmt.Println(config)
+	setup.Config = config
 	return nil
 }
 
 func getConfig(configData []byte) (Config, error) {
 	var config Config
 	err := json.Unmarshal(configData, &config)
-	fmt.Println(config)
 	return config, err
 }
