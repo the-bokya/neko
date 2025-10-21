@@ -6,6 +6,7 @@ import (
 )
 
 type VMImage struct {
+	Name                 string `json:"name"`
 	VMImagePath          string `json:"vm_image_path"`
 	BaseImagePath        string `json:"base_image_path"`
 	BaseImageDownloadURL string `json:"base_image_download_url"`
