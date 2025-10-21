@@ -2,7 +2,6 @@ package setup
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 )
