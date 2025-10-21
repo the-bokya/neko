@@ -42,7 +42,7 @@ func (image *VMImage) SetupVMImage() error {
 		if err != nil {
 			return err
 		}
-		if err = os.MkdirAll(image.getBaseFolderPath(), 0644); err != nil {
+		if err = os.MkdirAll(image.getBaseFolderPath(), 0755); err != nil {
 			return err
 		}
 		for i := range 3 {
@@ -69,7 +69,7 @@ func (image *VMImage) downloadVMImage() error {
 	if err != nil {
 		return err
 	}
-	baseImageFile, err := os.Create(image.getBaseImagePath())
+	baseImageFile, err := os.Create(image.GetBaseImagePath())
 	if err != nil {
 		return err
 	}
@@ -84,7 +84,7 @@ func (image *VMImage) downloadVMImage() error {
 		return err
 	}
 	baseImageFile.Close()
-	hashesMatch, hashSum, err := image.verifySHA256Sum(image.getBaseImagePath(), targetSHA256)
+	hashesMatch, hashSum, err := image.verifySHA256Sum(image.GetBaseImagePath(), targetSHA256)
 	if err != nil {
 		return err
 	} else {
@@ -94,7 +94,7 @@ func (image *VMImage) downloadVMImage() error {
 			fmt.Println("Successfully matched!")
 		} else {
 			fmt.Println("Not matching")
-			os.Remove(image.getBaseImagePath())
+			os.Remove(image.GetBaseImagePath())
 			return ErrImageDownload
 		}
 	}
@@ -117,11 +117,11 @@ func isFilePresent(path string) (bool, error) {
 func (image *VMImage) getBaseFolderPath() string {
 	return filepath.Join(EtcPath, image.Name)
 }
-func (image *VMImage) getBaseImagePath() string {
+func (image *VMImage) GetBaseImagePath() string {
 	return filepath.Join(image.getBaseFolderPath(), "base_image")
 }
 func (image *VMImage) doesSystemImageExist() (bool, error) {
-	exists, err := isFilePresent(image.getBaseImagePath())
+	exists, err := isFilePresent(image.GetBaseImagePath())
 	if exists {
 		image.Status = VMImageDownloaded
 		return true, nil

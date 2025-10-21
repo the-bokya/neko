@@ -1,8 +1,6 @@
 package libvirtapi
 
 import (
-	"fmt"
-
 	"libvirt.org/go/libvirt"
 )
 
@@ -15,9 +13,25 @@ func (libvirtObject *Libvirt) Init() error {
 	if err != nil {
 		return err
 	}
-	a, err := l.GetHostname()
-	fmt.Println(a, "meow")
 	libvirtObject.Conn = l
 	return nil
 
+}
+
+func (libvirtObject *Libvirt) CreateVM(name string, file string, numberOfVCPUs uint, memory uint) (*libvirt.Domain, error) {
+	config := GenerateLibvirtConfig(name)
+	config.AddFileDisk(file)
+	config.Network()
+	config.VCPUs(numberOfVCPUs)
+	config.Memory(memory)
+	xmlConfig, err := config.Config.Marshal()
+	if err != nil {
+		return nil, err
+	}
+	domain, err := libvirtObject.Conn.DomainDefineXML(xmlConfig)
+	defer domain.Free()
+	if err != nil {
+		return nil, err
+	}
+	return domain, err
 }

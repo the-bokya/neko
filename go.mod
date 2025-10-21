@@ -3,6 +3,7 @@ module neko
 go 1.25.2
 
 require (
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/labstack/echo/v4 v4.13.4 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
@@ -18,4 +19,5 @@ require (
 	golang.org/x/term v0.36.0 // indirect
 	golang.org/x/text v0.25.0 // indirect
 	libvirt.org/go/libvirt v1.11006.0 // indirect
+	libvirt.org/go/libvirtxml v1.11008.0 // indirect
 )

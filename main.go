@@ -4,8 +4,6 @@ import (
 	"embed"
 	"fmt"
 	"log"
-	"neko/application"
-	"neko/libvirtapi"
 	"neko/setup"
 	"os"
 )
@@ -15,14 +13,7 @@ var defaultConfigDir embed.FS
 
 // TODO: refactor
 func main() {
-	lv := &libvirtapi.Libvirt{}
-	err := lv.Init()
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	conn := lv.Conn
-	app := &application.Application{}
-	app.LibvirtConn = conn
+
 	args := os.Args
 
 	if len(args) < 2 {
@@ -56,7 +47,9 @@ func main() {
 
 		}
 	case "serve":
-		serve(app)
+		if err := serve(); err != nil {
+			log.Fatalln(err)
+		}
 	default:
 		if len(args) < 2 {
 			fmt.Println("Please provide a valid argument. Valid arguments:")

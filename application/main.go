@@ -1,11 +1,11 @@
 package application
 
-import "libvirt.org/go/libvirt"
+import (
+	"neko/libvirtapi"
+	"neko/setup"
+)
 
 type Application struct {
-	LibvirtConn *libvirt.Connect
-}
-
-func main() {
-
+	VMConfig *setup.Config
+	Libvirt  *libvirtapi.Libvirt
 }
