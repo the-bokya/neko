@@ -33,6 +33,14 @@ go install
    
    Images specified in `/etc/neko/config.json` in the field `vm_images` will be downloaded and their sha256sum will be verified.
 
+3. Start the server:
+   
+   ```bash
+   neko serve
+   ```
+   
+
+
 # Endpoints
 
 1. Define new VMs
