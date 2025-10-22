@@ -26,8 +26,8 @@ func serve() error {
 	app.VMConfig = &appSetup.Config
 
 	e := echo.New()
-	n := e.Group("/new")
-	n.POST("/vm", app.CreateVM)
+	vmGroup := e.Group("/vms")
+	vmGroup.POST("/new", app.CreateVM)
 	e.Start("0.0.0.0:8000")
 	return nil
 }

@@ -46,7 +46,7 @@ go install
 1. Define new VMs
 
 ```bash
-curl localhost:8000/new/vm --json '{"name": "new-vm", "vcpus": 1, "memory": 512, "image": "Ubuntu 24.04", "disk_size": 5}'
+curl localhost:8000/vms/new --json '{"name": "new-vm", "vcpus": 1, "memory": 512, "image": "Ubuntu 24.04", "disk_size": 5}'
 ```
 
 Output:
