@@ -1,6 +1,7 @@
 package application
 
 import (
+	"errors"
 	"fmt"
 	"neko/setup"
 	"net/http"
@@ -8,6 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/labstack/echo/v4"
+	"libvirt.org/go/libvirt"
 )
 
 type ResponseStatus string
@@ -82,4 +84,19 @@ func (app *Application) getVMImageFromName(name string) *setup.VMImage {
 		}
 	}
 	return nil
+}
+
+func (app *Application) MiddlewareVMDoesNotExist(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		name := c.Param("name")
+		dom, err := app.Libvirt.Conn.LookupDomainByName(name)
+		if errors.Is(err, libvirt.ERR_NO_DOMAIN) {
+			return c.JSON(http.StatusNotFound, Response{Status: StatusNotOkay, Message: fmt.Sprintf("There is no VM by the name %s", name)})
+		}
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, Response{Status: StatusNotOkay, Message: err})
+		}
+		dom.Free()
+		return next(c)
+	}
 }

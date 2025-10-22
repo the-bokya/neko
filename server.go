@@ -27,6 +27,9 @@ func serve() error {
 
 	e := echo.New()
 	vmGroup := e.Group("/vms")
+	vmGroupName := vmGroup.Group("/:name")
+	vmGroupName.Use(app.MiddlewareVMDoesNotExist)
+	vmGroupName.POST("/start", app.StartVM)
 	vmGroup.POST("/new", app.CreateVM)
 	e.Start("0.0.0.0:8000")
 	return nil
