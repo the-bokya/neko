@@ -38,22 +38,32 @@ go install
    ```bash
    neko serve
    ```
-   
-
 
 # Endpoints
 
 1. Define new VMs
+   
+   ```bash
+   curl localhost:8000/vms/new --json '{"name": "new-vm", "vcpus": 1, "memory": 512, "image": "Ubuntu 24.04", "disk_size": 5}'
+   ```
+   
+   Output:
+   
+   ```bash
+   {"status":"Ok","message":"VM created successfully","data":{"name":"new-vm","uuid":"8d715798-663f-4cca-b6b3-0278ee772f1e","state":5}}
+   ```
 
-```bash
-curl localhost:8000/vms/new --json '{"name": "new-vm", "vcpus": 1, "memory": 512, "image": "Ubuntu 24.04", "disk_size": 5}'
-```
-
-Output:
-
-```bash
-{"status":"Ok","message":"VM created successfully","data":{"name":"new-vm","uuid":"8d715798-663f-4cca-b6b3-0278ee772f1e"}}
-```
+2. Start a VM
+   
+   ```bash
+   curl localhost:8000/vms/<vm-name>/start -X POST
+   ```
+   
+   Output:
+   
+   ```bash
+   {"status":"Ok","message":"VM started successfully","data":{"name":"new-vm","uuid":"8d715798-663f-4cca-b6b3-0278ee772f1e","state":1}}
+   ```
 
 # Note
 
