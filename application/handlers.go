@@ -32,8 +32,9 @@ type VMSpec struct {
 
 // passed in the response
 type VMInfo struct {
-	Name string `json:"name"`
-	UUID string `json:"uuid"`
+	Name  string              `json:"name"`
+	UUID  string              `json:"uuid"`
+	State libvirt.DomainState `json:"state"`
 }
 
 // TODO: Make everything that can be asynchronous asynchronous
@@ -69,12 +70,27 @@ func (app *Application) CreateVM(c echo.Context) error {
 	dom.Free()
 	dom, err = app.Libvirt.Conn.LookupDomainByName(spec.Name)
 	if err != nil {
-		fmt.Println(err)
+		return c.JSON(http.StatusInternalServerError, Response{Status: StatusNotOkay, Message: err})
 	}
-	domainUUID, _ := dom.GetUUIDString()
-	domainName, _ := dom.GetName()
+	vmInfo := app.getVMInfo(dom)
 	dom.Free()
-	return c.JSON(http.StatusOK, Response{Status: StatusOK, Message: "VM created successfully", Data: VMInfo{Name: domainName, UUID: domainUUID}})
+	return c.JSON(http.StatusOK, Response{Status: StatusOK, Message: "VM created successfully", Data: vmInfo})
+}
+
+func (app *Application) StartVM(c echo.Context) error {
+	name := c.Param("name")
+	dom, err := app.Libvirt.Conn.LookupDomainByName(name)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, Response{Status: StatusNotOkay, Message: err})
+	}
+	err = dom.Create()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, Response{Status: StatusNotOkay, Message: err})
+	}
+	vmInfo := app.getVMInfo(dom)
+	dom.Free()
+
+	return c.JSON(http.StatusOK, Response{Status: StatusOK, Message: "VM started successfully", Data: vmInfo})
 }
 
 func (app *Application) getVMImageFromName(name string) *setup.VMImage {
@@ -99,4 +115,12 @@ func (app *Application) MiddlewareVMDoesNotExist(next echo.HandlerFunc) echo.Han
 		dom.Free()
 		return next(c)
 	}
+}
+
+func (app *Application) getVMInfo(dom *libvirt.Domain) *VMInfo {
+	name, _ := dom.GetName()
+	uuid, _ := dom.GetUUIDString()
+	state, _, _ := dom.GetState()
+
+	return &VMInfo{Name: name, UUID: uuid, State: state}
 }
